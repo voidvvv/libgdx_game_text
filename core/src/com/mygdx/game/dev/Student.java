@@ -10,6 +10,6 @@ public class Student {
     private String name;
 
     public Student() {
-        name = "dev02";
+        name = "dev02-02";
     }
 }
