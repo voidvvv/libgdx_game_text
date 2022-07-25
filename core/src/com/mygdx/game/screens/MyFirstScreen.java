@@ -157,15 +157,6 @@ public class MyFirstScreen implements Screen {
 
     @Override
     public void render(final float delta) {
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            int x = Gdx.input.getX();
-            int y = Gdx.input.getY();
-
-            Gdx.app.log("touch!","x:"+x+" y:"+y);
-            // ib
-            Gdx.app.log("ib:!","x:"+ib.getX()+" y:"+ib.getY()+" width: "+ib.getWidth()+" heigh:"+ ib.getHeight());
-
-        }
 
         ScreenUtils.clear(Color.CLEAR);
         batch.setColor(1,1,1,1);
@@ -173,17 +164,11 @@ public class MyFirstScreen implements Screen {
 //        myStage.getViewport().getCamera().position.x++;
         myStage.getViewport().getCamera().update();
 
-
-//        Gdx.app.getVersion()
-
-//        camera.update();
         batch.setProjectionMatrix(myStage.getViewport().getCamera().combined);
 
         batch.begin();
         batch.draw(background,0,0,myStage.getViewport().getWorldWidth(),myStage.getViewport().getWorldHeight());
 
-//            ib.draw(batch,1);
-//            Float f = new Float();
         int y = 0;
         for(int x=0;x<MyStatusManager.TOTAL_HEAL;x++){
             if (y<MyStatusManager.CUR_HEAL){
@@ -196,7 +181,6 @@ public class MyFirstScreen implements Screen {
 
         bf.getData().setScale(5);
         bf.draw(batch,String.valueOf(MyStatusManager.TOTAL_SCORE),50,50,500,0,true);
-        // png/zhezhao.png
 
         if (!MyStatusManager.GAME_OVER){
             myStage.draw();
