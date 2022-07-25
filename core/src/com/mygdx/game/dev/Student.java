@@ -12,4 +12,8 @@ public class Student {
     public Student() {
         name = "dev01-02";
     }
+
+    public void test(){
+        System.out.println("dev01");
+    }
 }
