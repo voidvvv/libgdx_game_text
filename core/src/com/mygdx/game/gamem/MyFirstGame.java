@@ -38,9 +38,9 @@ public class MyFirstGame extends Game {
 
         myFirstScreen = new MyFirstScreen(this);
         testScreen = new TestScreen(this);
-//        setScreen(menuScreen,menuAssetManager());
-        myTestScreen2 = new MyTestScreen2();
-        setScreen(myTestScreen2);
+        setScreen(menuScreen,menuAssetManager());
+//        myTestScreen2 = new MyTestScreen2();
+//        setScreen(myTestScreen2);
     }
 
 

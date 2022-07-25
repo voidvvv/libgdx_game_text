@@ -118,8 +118,7 @@ public class MyFirstScreen implements Screen {
         zhezhao = myGame.assetManager().get("png/zhezhao.png",Texture.class);
         popGameManager = new PopGameManager(myStage,myGame);
         camera.setToOrtho(false,320,240);
-        camera.setToOrtho(false,Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2);
-//        camera.position.set()
+
         myStage.getViewport().setCamera(camera);
         myStage.getViewport().setWorldWidth(640);
         myStage.getViewport().setWorldHeight(480);
@@ -135,11 +134,7 @@ public class MyFirstScreen implements Screen {
         emptyHeart = myGame.assetManager().<Texture>get("png/sys/emptyheart.png");
         background = myGame.assetManager().get("png/background.jpeg");
 //        Ray pickRay = myStage.getViewport().getCamera().getPickRay();
-
         myStage.addActor(ib);
-
-//        OrthographicCamera ca = new OrthographicCamera();
-//        myStage.getViewport().setCamera(camera);
 
         Service.submit(new GeneratePotRunable(myGame,myStage));
 //        Service.submit(new CleanPotRunnable(myStage));
@@ -216,9 +211,11 @@ public class MyFirstScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        myStage.getViewport().update(width,height);
-        gameOverStage.getViewport().update(width,height);
-        System.out.println("MyFirstScreen resize!!");
+        myStage.getViewport().update(width,height,true);
+        camera.setToOrtho(false,(float) width/(float)2,(float) height/(float)2);
+        camera.update();
+        gameOverStage.getViewport().update(width,height,true);
+        System.out.println("MyFirstScreen resize!!"+String.format("{width:%s,height:%s}",width,height));
     }
 
     @Override

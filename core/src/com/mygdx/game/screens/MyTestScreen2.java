@@ -2,10 +2,12 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
  * @Classname MyTestScreen2
@@ -27,8 +29,8 @@ public class MyTestScreen2 implements Screen {
         stage = new Stage();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,320,240);
-        texture = new Texture("png/background.jpeg");
+        camera.setToOrtho(false,600,400);
+        texture = new Texture("badlogic.jpg");
 
         stage.getViewport().setWorldWidth(640);
         stage.getViewport().setWorldHeight(480);
@@ -37,7 +39,8 @@ public class MyTestScreen2 implements Screen {
 
     @Override
     public void render(float delta) {
-        camera.update();
+        ScreenUtils.clear(Color.CLEAR);
+        stage.getViewport().getCamera().update();
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
 
         batch.begin();
@@ -47,7 +50,7 @@ public class MyTestScreen2 implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width,height,true);
     }
 
     @Override
