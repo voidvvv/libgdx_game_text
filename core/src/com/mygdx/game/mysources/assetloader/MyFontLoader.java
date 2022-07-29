@@ -36,7 +36,7 @@ public class MyFontLoader extends AsynchronousAssetLoader<BitmapFont, MyFontLoad
 
         if (parameter == null){
             myParameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS+"测试测试测试测试";
-            myParameter.size = 35;
+            myParameter.size = 150;
             myParameter.color = Color.WHITE;
         }else {
             myParameter.characters = parameter.charset;

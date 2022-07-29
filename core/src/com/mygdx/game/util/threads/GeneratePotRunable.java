@@ -7,6 +7,8 @@ import com.mygdx.game.anim.Pot;
 import com.mygdx.game.gamem.MyFirstGame;
 import com.mygdx.game.mysources.MyStatusManager;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @Classname GeneratePotRunable
  * @Description
@@ -18,8 +20,8 @@ public class GeneratePotRunable implements Runnable {
     long timeHigh = 1500;
     private Stage stage;
     private MyFirstGame myFirstGame;
-
-    public GeneratePotRunable(MyFirstGame myFirstGame,Stage stage) {
+    ReentrantLock reentrantLock;
+    public GeneratePotRunable(MyFirstGame myFirstGame, Stage stage, ReentrantLock reentrantLock) {
         this.myFirstGame = myFirstGame;
         this.stage = stage;
     }

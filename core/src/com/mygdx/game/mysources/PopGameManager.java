@@ -9,6 +9,8 @@ import com.mygdx.game.gamem.MyFirstGame;
 import com.mygdx.game.stages.MyStage;
 import com.mygdx.game.util.threads.GeneratePotRunable;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @Classname PopGameManager
  * @Description
@@ -81,6 +83,6 @@ public class PopGameManager {
     }
 
     public Runnable generatePopAsyc(){
-        return new GeneratePotRunable(myFirstGame,myStage);
+        return new GeneratePotRunable(myFirstGame,myStage,new ReentrantLock());
     }
 }

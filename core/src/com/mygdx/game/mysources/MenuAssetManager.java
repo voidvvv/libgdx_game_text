@@ -1,5 +1,7 @@
 package com.mygdx.game.mysources;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -27,7 +29,11 @@ public class MenuAssetManager extends MainAssetManager{
     @Override
     public void loadAll() {
         super.loadAll();
-        load("png/title.png", Texture.class);
+        Class<? extends Files> aClass = Gdx.files.getClass();
+        System.out.println(aClass);
+        String absolutePath = Gdx.files.internal("android/assets/png/title.png").file().getAbsolutePath();
+        System.out.println(absolutePath);
+        load("android/assets/png/title.png", Texture.class);
         load("png/start_button.png",TextureRegionDrawable.class);
         load("png/start_button02.png",TextureRegionDrawable.class);
     }

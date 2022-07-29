@@ -1,6 +1,7 @@
 package com.mygdx.game.gamem;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.Service;
 import com.mygdx.game.mysources.MainAssetManager;
@@ -22,14 +23,20 @@ public class MyFirstGame extends Game {
     LoadingScreen loadingScreen;
     MyAssetManager myAssetManager;
     MenuAssetManager menuAssetManager;
+    MyPopGameScreen myPopGameScreen;
 
 
 
     MyTestScreen2 myTestScreen2;
     @Override
     public void create() {
+        String localStoragePath = Gdx.files.getLocalStoragePath();
+        System.out.println(localStoragePath);
+//        System.out.println(Gdx.files.internal("").file().getAbsolutePath());
+        System.out.println(Gdx.files.getExternalStoragePath());
         Service.init();
         menuScreen = new MenuScreen(this);
+        myPopGameScreen = new MyPopGameScreen(this);
         menuAssetManager = new MenuAssetManager();
         myAssetManager = new MyAssetManager();
         loadingScreen = new LoadingScreen(this);
@@ -39,7 +46,7 @@ public class MyFirstGame extends Game {
         myFirstScreen = new MyFirstScreen(this);
         testScreen = new TestScreen(this);
         setScreen(menuScreen,menuAssetManager());
-//        myTestScreen2 = new MyTestScreen2();
+        myTestScreen2 = new MyTestScreen2();
 //        setScreen(myTestScreen2);
     }
 
@@ -62,6 +69,6 @@ public class MyFirstGame extends Game {
     }
 
     public void convertToFirstScreen() {
-        setScreen(myFirstScreen,assetManager());
+        setScreen(myPopGameScreen,assetManager());
     }
 }

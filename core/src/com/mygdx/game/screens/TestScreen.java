@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -91,6 +92,8 @@ public class TestScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+
         ScreenUtils.clear(Color.BLUE);
         camera.update();
         if (p1.contains(point)){
@@ -108,6 +111,7 @@ public class TestScreen implements Screen {
         batch.end();
 
         p1.rotate(1);
+
 //        System.out.println(String.format("x:%s,y:%s",p1.getX(),p1.getY()));
     }
 

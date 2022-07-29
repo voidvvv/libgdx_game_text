@@ -54,8 +54,7 @@ public class Pot extends Actor {
         addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Pot.this.trash = true;
-                MyStatusManager.TOTAL_SCORE+=score;
+                Pot.this.checkPress();
                 Gdx.app.log("popIn:","touch{ x:"+x+" y:"+y+"} " + "self: { x:"+getX()+" y:"+getY()+" }");
 
 //                System.out.println("clickde!!");
@@ -97,5 +96,12 @@ public class Pot extends Actor {
         // 这里的originx 和 originY 都是相对于当前actor的
         batch.draw(image,getX(),getY(),getWidth()/2,getHeight()/2,getWidth(),getHeight(),getScaleX(),getScaleY(),getRotation());
 
+    }
+
+    public void checkPress(){
+        if (!this.trash){
+            this.trash = true;
+            MyStatusManager.TOTAL_SCORE+=score;
+        }
     }
 }

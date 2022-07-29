@@ -40,7 +40,7 @@ public class MyTexturDrawableLoader extends AsynchronousAssetLoader<TextureRegio
 
     @Override
     public void loadAsync(AssetManager manager, String fileName, FileHandle file, AssetLoaderParameters<TextureRegionDrawable> parameter) {
-//        trd = null;
+        textureData = null;
         textureData =TextureData.Factory.loadFromFile(file, null, false);
 
 
@@ -49,15 +49,7 @@ public class MyTexturDrawableLoader extends AsynchronousAssetLoader<TextureRegio
 
     @Override
     public TextureRegionDrawable loadSync(AssetManager manager, String fileName, FileHandle file, AssetLoaderParameters<TextureRegionDrawable> parameter) {
-        Gdx.app.error("MyTexturDrawableLoader", "loadSync" + this.hashCode() + " filename:" + fileName);
 
-        if (f == null) {
-            Gdx.app.error("MyTexturDrawableLoader", "f not ready!");
-            f = "ready！！！！";
-        } else {
-            Gdx.app.error("MyTexturDrawableLoader", f);
-
-        }
         if (textureData!=null){
             TextureRegion re = new TextureRegion(new Texture(textureData));
             return new TextureRegionDrawable(re);

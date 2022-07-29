@@ -54,7 +54,7 @@ public class LoadingScreen implements Screen {
             batch.end();
 
             this.game.setScreen(dest);
-            this.dispose();
+//            this.dispose();
         }
 
 

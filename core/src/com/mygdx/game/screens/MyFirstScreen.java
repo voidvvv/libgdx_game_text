@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -35,6 +37,8 @@ import com.mygdx.game.stages.MyStage;
 import com.mygdx.game.util.threads.CleanPotRunnable;
 import com.mygdx.game.util.threads.GeneratePotRunable;
 import com.sun.tools.sjavac.Log;
+
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -66,6 +70,8 @@ public class MyFirstScreen implements Screen {
 
     MyStage gameOverStage;
 
+    OrthographicCamera mySysCamera;
+
 
 
     public MyFirstScreen(final MyFirstGame myGame) {
@@ -77,6 +83,8 @@ public class MyFirstScreen implements Screen {
     public void init(){
         gameOverStage = new MyStage();
         MyStatusManager.init();
+        mySysCamera = new OrthographicCamera();
+        mySysCamera.setToOrtho(false,640,480);
         time = 0;
         restart= new ImageButton(myGame.assetManager().<Drawable>get("png/restart.png"),myGame.assetManager().<Drawable>get("png/restart01.png"));
         gameOverImg = myGame.assetManager().get("png/gameover.png",Texture.class);
@@ -104,6 +112,18 @@ public class MyFirstScreen implements Screen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+        myStage.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                myGame.convertToTestScreen();
+//                dispose();
+
+//                myGame.assetManager().dispose();
+                Gdx.app.log(" myStage popIn:","touch{ x:"+x+" y:"+y+"} " + "self: { x:"+ib.getX()+" y:"+ib.getY()+" }");
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
         ib.setVisible(true);
         restart.setVisible(true);
@@ -117,13 +137,13 @@ public class MyFirstScreen implements Screen {
         gameOverStage.addActor(restart);
         zhezhao = myGame.assetManager().get("png/zhezhao.png",Texture.class);
         popGameManager = new PopGameManager(myStage,myGame);
-        camera.setToOrtho(false,320,240);
+        camera.setToOrtho(false,640,480);
 
         myStage.getViewport().setCamera(camera);
         myStage.getViewport().setWorldWidth(640);
         myStage.getViewport().setWorldHeight(480);
 
-        batch.setProjectionMatrix(myStage.getViewport().getCamera().combined);
+        batch.setProjectionMatrix(mySysCamera.combined);
     }
 
     @Override
@@ -136,7 +156,7 @@ public class MyFirstScreen implements Screen {
 //        Ray pickRay = myStage.getViewport().getCamera().getPickRay();
         myStage.addActor(ib);
 
-        Service.submit(new GeneratePotRunable(myGame,myStage));
+        Service.submit(new GeneratePotRunable(myGame,myStage,new ReentrantLock()));
 //        Service.submit(new CleanPotRunnable(myStage));
 
         Gdx.input.setInputProcessor(myStage);
@@ -152,17 +172,22 @@ public class MyFirstScreen implements Screen {
 
     @Override
     public void render(final float delta) {
-
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+            System.out.printf("input:{x:%s,y:%s}%n",x,y);
+        }
         ScreenUtils.clear(Color.CLEAR);
         batch.setColor(1,1,1,1);
 
 //        myStage.getViewport().getCamera().position.x++;
         myStage.getViewport().getCamera().update();
-
-        batch.setProjectionMatrix(myStage.getViewport().getCamera().combined);
+        mySysCamera.update();
+        batch.setProjectionMatrix(mySysCamera.combined);
 
         batch.begin();
-        batch.draw(background,0,0,myStage.getViewport().getWorldWidth(),myStage.getViewport().getWorldHeight());
+        menuBatch.begin();
+        batch.draw(background,0,0,mySysCamera.viewportWidth,mySysCamera.viewportHeight);
 
         int y = 0;
         for(int x=0;x<MyStatusManager.TOTAL_HEAL;x++){
@@ -175,21 +200,21 @@ public class MyFirstScreen implements Screen {
         }
 
         bf.getData().setScale(5);
-        bf.draw(batch,String.valueOf(MyStatusManager.TOTAL_SCORE),50,50,500,0,true);
+        bf.draw(menuBatch,String.valueOf(MyStatusManager.TOTAL_SCORE),0,0,480, Align.right,true);
 
         if (!MyStatusManager.GAME_OVER){
             myStage.draw();
         }
         if (MyStatusManager.GAME_OVER){
             batch.setColor(1,1,1,0.5f);
-            batch.draw(zhezhao,0,0,myStage.getViewport().getWorldWidth(),myStage.getViewport().getWorldHeight());
-            menuBatch.begin();
 
+
+            menuBatch.draw(zhezhao,0,0,mySysCamera.viewportWidth,mySysCamera.viewportHeight);
             menuBatch.draw(gameOverImg,50,140,350,200);
             // 重新开始按钮
             gameOverStage.draw();
 //            gameOverStage.act();
-            menuBatch.end();
+
         }else {
             time+=delta;
 
@@ -203,6 +228,7 @@ public class MyFirstScreen implements Screen {
         }
 
         batch.end();
+        menuBatch.end();
         popGameManager.cleanPop();
 
 
@@ -211,10 +237,21 @@ public class MyFirstScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        Gdx.app.log("resize","camera before position: " +camera.position);
         myStage.getViewport().update(width,height,true);
-        camera.setToOrtho(false,(float) width/(float)2,(float) height/(float)2);
-        camera.update();
+
+        Gdx.app.log("resize","camera after position: " +camera.position);
+//        camera.viewportHeight = myStage.getViewport().getWorldHeight()/2;
+//        camera.viewportWidth = myStage.getViewport().getWorldWidth()/2;
+        mySysCamera.viewportHeight = 480;
+        mySysCamera.viewportWidth = 640;
+        mySysCamera.update();
+//        camera.update();
         gameOverStage.getViewport().update(width,height,true);
+        Gdx.app.log("resize",String.format("{worldWidth:%s,worldHeight:%s,screenWidth:%s,screenHeight:%s,resizeParamWidth:%s,resizeParamHeight:%s}"
+                    ,myStage.getViewport().getWorldWidth(),myStage.getViewport().getWorldHeight(),
+                    Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),
+                    width,height));
         System.out.println("MyFirstScreen resize!!"+String.format("{width:%s,height:%s}",width,height));
     }
 

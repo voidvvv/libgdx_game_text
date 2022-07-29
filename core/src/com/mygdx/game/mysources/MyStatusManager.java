@@ -9,6 +9,8 @@ import com.sun.org.apache.bcel.internal.generic.FADD;
  * @Created by zkj
  */
 public class MyStatusManager {
+    public static float totalTime = 0;
+
     public static int TOTAL_HEAL = 5;
 
     public static int CUR_HEAL = 1;
@@ -24,5 +26,6 @@ public class MyStatusManager {
         MyStatusManager.CUR_HEAL = MyStatusManager.TOTAL_HEAL;
         TOTAL_SCORE = 0;
         PAUSE =false;
+        totalTime = 3;
     }
 }
