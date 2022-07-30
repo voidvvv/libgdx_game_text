@@ -1,6 +1,8 @@
 package com.mygdx.game.mysources;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -40,6 +42,7 @@ public class MyAssetManager extends MainAssetManager {
 
         load("badlogic.jpg",Texture.class);
         load("png/pop/ttq01.png", Texture.class);
+        load("png/ice_cream01.png",Texture.class);
         load("btn/test_btn01.png",TextureRegionDrawable.class);
         load("btn/test_btn02.png", TextureRegionDrawable.class);
         load("png/zhezhao.png",Texture.class);
@@ -50,6 +53,9 @@ public class MyAssetManager extends MainAssetManager {
         load("png/gameover.png",Texture.class);
         load("png/restart.png",TextureRegionDrawable.class);
         load("png/restart01.png",TextureRegionDrawable.class);
+        load("music/jztg_bgm.mp3", Music.class);
+        load("music/press_sound.mp3", Sound.class);
+        load("music/bite.mp3",Sound.class);
     }
 
 

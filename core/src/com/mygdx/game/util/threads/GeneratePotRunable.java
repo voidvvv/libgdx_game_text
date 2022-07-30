@@ -2,7 +2,9 @@ package com.mygdx.game.util.threads;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.game.anim.DubbleClickPop;
 import com.mygdx.game.anim.Pot;
 import com.mygdx.game.gamem.MyFirstGame;
 import com.mygdx.game.mysources.MyStatusManager;
@@ -51,17 +53,27 @@ public class GeneratePotRunable implements Runnable {
                 final float x = MathUtils.random(20f, (float) (width-20));
                 final float y = MathUtils.random(20f, (float) (height-20));
                 Gdx.graphics.getHeight();
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        stage.addActor(new Pot(myFirstGame,x,y,0));
-                    }
-                });
-                try {
-                    Thread.sleep(random);
-                } catch (InterruptedException e) {
-                    System.out.println("!!!!!!!!");
+                Actor a = null;
+                if (MathUtils.random(100)<=20){
+                    a = new DubbleClickPop(myFirstGame,x,y);
+                }else {
+                    a = new Pot(myFirstGame,x,y,0);
                 }
+                if (a!=null){
+                    final Actor t =a;
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            stage.addActor(t);
+                        }
+                    });
+                    try {
+                        Thread.sleep(random);
+                    } catch (InterruptedException e) {
+                        System.out.println("!!!!!!!!");
+                    }
+                }
+
             }
             Gdx.app.log("GeneratePotRunable","end");
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -39,11 +40,12 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false);
+//        camera.setToOrtho(false);
         stage = new Stage();
-
+        camera.setToOrtho(false,640,480);
         Gdx.input.setInputProcessor(stage);
         MenuAssetManager menuAssetManager = game.menuAssetManager();
         title = menuAssetManager.titleTexture();
@@ -57,14 +59,25 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 game.convertToFirstScreen();
-                MenuScreen.this.dispose();
+
             }
         });
+        stage.getViewport().setWorldHeight(1);
+        stage.getViewport().setWorldWidth(1);
         stage.addActor(startButton);
+
     }
 
     @Override
     public void render(float delta) {
+        if (Gdx.input.justTouched()){
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+            Gdx.app.log("touch!",String.format("x:%s, y:%s",x,y));
+            Vector3 unproject = camera.unproject(new Vector3(x, y, 0));
+            Gdx.app.log("touch convert!",String.format("x:%s, y:%s",unproject.x,unproject.y));
+        }
+
         camera.update();
         ScreenUtils.clear(Color.BLUE);
         batch.setProjectionMatrix(camera.combined);
@@ -77,7 +90,19 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        float worldHeight = stage.getViewport().getWorldHeight();
+        float worldWidth = stage.getViewport().getWorldWidth();
+        Gdx.app.log("resize pre",String.format("worldHeight:%s  worldWidth:%s",worldHeight,worldWidth));
         stage.getViewport().update(width,height);
+
+        camera.viewportHeight = 480;
+        camera.viewportWidth = 640;
+//        camera.translate(200,20);
+//        stage.getViewport().setScreenWidth(10);
+//        stage.getViewport().setScreenWidth(10);
+
+        Gdx.app.log("resize after",String.format("worldHeight:%s  worldWidth:%s",stage.getViewport().getWorldHeight(),stage.getViewport().getWorldWidth()));
+
     }
 
     @Override
@@ -92,7 +117,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-
+        this.dispose();
     }
 
     @Override

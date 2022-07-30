@@ -1,6 +1,7 @@
 package com.mygdx.game.anim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -38,22 +39,24 @@ public class Pot extends Actor {
 
     private int score;
 
-
+    Sound sound;
 
     public Pot(MyFirstGame myFirstGame,float x,float y,int type) {
         super();
         this.anim = myFirstGame.assetManager().getPopAnim();
 //        System.out.println("Pot!!!");
+        sound = myFirstGame.assetManager().get("music/press_sound.mp3");
         width = 20;
         height = 20;
         touchRegion = new Circle(x,y,width);
-        score = MathUtils.random(50,100);
+        score = 2;
         setBounds(x,y,width,height);
         addAction(new MyScalAction());
 
         addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                sound.play();
                 Pot.this.checkPress();
                 Gdx.app.log("popIn:","touch{ x:"+x+" y:"+y+"} " + "self: { x:"+getX()+" y:"+getY()+" }");
 
@@ -99,9 +102,7 @@ public class Pot extends Actor {
     }
 
     public void checkPress(){
-        if (!this.trash){
-            this.trash = true;
-            MyStatusManager.TOTAL_SCORE+=score;
-        }
+        setVisible(false);
+        MyStatusManager.TOTAL_SCORE+=this.score;
     }
 }

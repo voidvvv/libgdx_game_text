@@ -26,6 +26,6 @@ public class MyStatusManager {
         MyStatusManager.CUR_HEAL = MyStatusManager.TOTAL_HEAL;
         TOTAL_SCORE = 0;
         PAUSE =false;
-        totalTime = 3;
+        totalTime = 60;
     }
 }

@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,10 +16,12 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-
+		Files files = Gdx.files;
+		FileHandle classpath = Gdx.files.classpath("");
+		System.out.println(classpath.file().getAbsolutePath());
 		batch = new SpriteBatch();
 
-		img = new Texture("badlogic.jpg");
+		img = new Texture(Gdx.files.internal("badlogic.jpg"));
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,6 +34,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class MyPopGameScreen implements Screen {
     private ReentrantLock reentrantLock;
+
+    Music bgm;
 
     private MyFirstGame myFirstGame;
     // draw 相关
@@ -93,10 +96,16 @@ public class MyPopGameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+
                 MyPopGameScreen.this.show();
+                MyPopGameScreen.this.resize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             }
         });
 //        restartBtn.setSkin();
+        bgm = myFirstGame.assetManager().get("music/jztg_bgm.mp3");
+        bgm.play();
+        bgm.setVolume(0.5f);
+
         restartBtn.setBounds(50,50,300,100);
         float imageWidth = sysCamera.viewportWidth*0.75f;
         float imageHeight = sysCamera.viewportHeight*0.3f;
@@ -117,9 +126,11 @@ public class MyPopGameScreen implements Screen {
         }else {
             renderNormalGame(delta);
             stage.act();
-            if (MyStatusManager.totalTime<=0){
+            ;
+            if (!bgm.isPlaying()){
                 Gdx.input.setInputProcessor(gameOverStage);
                 MyStatusManager.GAME_OVER = true;
+//                bgm.stop();
             }
             MyStatusManager.totalTime-=delta;
             cleanTrash(stage);
@@ -158,8 +169,8 @@ public class MyPopGameScreen implements Screen {
 
 
         while (iterator!=null && iterator.hasNext()){
-            Pot next = (Pot) iterator.next();
-            if (next.trash){
+            Actor next =  iterator.next();
+            if (!next.isVisible()){
                 iterator.remove();
             }
         }
@@ -178,14 +189,19 @@ public class MyPopGameScreen implements Screen {
                 sysBatch.draw(emptyHeart,20+((x)*40),420,30,30);
             }
         }
-
+//        scoreFont.draw(sysBatch,String.valueOf((int)MyStatusManager.totalTime),sysCamera.viewportWidth/2f,sysCamera.viewportHeight*0.90f,0,Align.top|Align.right,false);
         scoreFont.draw(sysBatch,String.valueOf(MyStatusManager.TOTAL_SCORE),sysCamera.viewportWidth*0.9f,sysCamera.viewportHeight*0.1f,0, Align.top|Align.right,false);
     }
 
     @Override
     public void resize(int width, int height) {
+        Gdx.app.log("myGame","resize!   "+width+"   "+height);
         stage.getViewport().update(width,height,true);
-        gameOverStage.getViewport().update(width,height,true);
+
+        gameOverStage.getViewport().update(width,height);
+        sysCamera.viewportWidth = 640;
+        sysCamera.viewportHeight = 480;
+        Gdx.app.log("myGame",String.format("syscam: width:%s,height:%s",sysCamera.viewportWidth,sysCamera.viewportHeight));
     }
 
     @Override
